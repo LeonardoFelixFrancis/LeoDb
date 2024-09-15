@@ -1,6 +1,7 @@
 from command_types import OperationsEnum
 from exceptions import InvalidOperation, InvalidCommand
-from target_table_factory import TargetTableFactory
+from parser.target_table_factory import TargetTableFactory
+from parser.target_column_factory import TargetColumnFactory
 
 class CommandParser():
 
@@ -27,10 +28,14 @@ class CommandParser():
 
         if command_type is None:
             raise InvalidOperation(f'Unknown Operation Keyword: {first_word}')
-            
+        
+        self.command_type = command_type
+
         return command_type
     
-    def get_target_table(self, message:str, command_type:int):
+    def get_target_table(self, message:str):
+        
+        command_type = self.command_type
 
         target_table_factory = TargetTableFactory(command_type).get_target_table_finder()
 
@@ -38,9 +43,11 @@ class CommandParser():
 
         return target_table
     
-    def get_target_columns(self, message:str, command_type:int):
+    def get_target_columns(self, message:str):
+        
+        command_type = self.command_type
 
-        target_columns_factory = TargetColumnsFactory(command_type).get_target_columns_factory()
+        target_columns_factory = TargetColumnFactory(command_type).get_target_columns_checker(message=message)
 
         target_columns = target_columns_factory.get_target_columns(message=message)
 

@@ -33,8 +33,8 @@ class BaseSelectTargetTable:
         pivot_first_next_space = message.find(' ', pivot_index)
         other_next_space = message.find(' ', pivot_first_next_space)
         
-        i = pivot_first_next_space
-        while message[other_next_space - 1] == ' ':
+        i = pivot_first_next_space + 1
+        while message[i - 1] == ' ':
             
             if i == len(message) - 1:
                 raise InvalidCommand(f'No Table informed')

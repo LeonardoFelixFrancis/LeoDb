@@ -20,6 +20,4 @@ class Charfield(BaseType):
 
         if len(value) > self.max_length: 
             raise InvalidValueError(f'Value cannot have a length larger than {self.max_length}, and the informed value have a length of: {len(value)}')
-        
-
-
+    

@@ -17,12 +17,12 @@ class ParserUtils:
         return values_beetween
 
     @classmethod
-    def try_to_find_keyword(cls, message, start_index:int, keyword_to_check:str) -> int:
+    def try_to_find_keyword(cls, message:str, start_index:int, keyword_to_check:str) -> int:
         '''
             Returns the index of the first keyword informed in the keyword_to_check parameter found on the message.
         '''
 
-        return message.find(start_index, keyword_to_check)
+        return message.find(keyword_to_check, start_index)
     
     @classmethod
     def try_to_find_keywords(cls, message, start_index:int, keywords_to_check:str) -> list[tuple]:

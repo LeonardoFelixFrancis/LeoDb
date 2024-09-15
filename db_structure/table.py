@@ -7,10 +7,11 @@ class Table:
 
     row_builder = RowBuilder()
 
-    def __init__(self, heading_cols:list[Column]):
+    def __init__(self, name:str, heading_cols:list[Column]):
 
         self.rows = []
         self.heading_cols = heading_cols
+        self.name = name
 
         self.required_cols = [col for col in self.heading_cols if col.required == True]
 

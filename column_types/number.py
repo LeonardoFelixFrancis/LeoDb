@@ -40,9 +40,3 @@ class Number:
 
         if len(string_split[0]) > self.max_digits:
             raise ConfigurationError(f'Number cannot have more digits than: {value}')
-        
-
-        
-
-
-

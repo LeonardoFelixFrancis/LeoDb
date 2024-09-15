@@ -1,6 +1,6 @@
 class InvalidOperation(Exception):
 
-    def __init__(self, message, errors):            
+    def __init__(self, message, errors=[]):            
         # Call the base class constructor with the parameters it needs
         super().__init__(message)
             
@@ -9,7 +9,7 @@ class InvalidOperation(Exception):
 
 class InvalidCommand(Exception):
 
-    def __init__(self, message, errors):
+    def __init__(self, message, errors=[]):
 
         super().__init__(message)
 
@@ -17,7 +17,7 @@ class InvalidCommand(Exception):
 
 class InvalidTypeError(Exception):
 
-    def __init__(self, message, errors):
+    def __init__(self, message, errors=[]):
 
         super().__init__(message)
 
@@ -25,7 +25,7 @@ class InvalidTypeError(Exception):
 
 class TypeValidationError(Exception):
 
-    def __init__(self, message, errors):
+    def __init__(self, message, errors=[]):
 
         super().__init__(message)
 
@@ -33,7 +33,7 @@ class TypeValidationError(Exception):
 
 class ConfigurationError(Exception):
 
-    def __init__(self, message, errors):
+    def __init__(self, message, errors=[]):
         
         super().__init__(message)
 
@@ -41,7 +41,7 @@ class ConfigurationError(Exception):
 
 class InvalidValueError(Exception): 
 
-    def __init__(self, message, errors): 
+    def __init__(self, message, errors=[]): 
 
         super().__init__(message) 
 
@@ -49,8 +49,24 @@ class InvalidValueError(Exception):
 
 class TableBuildingError(Exception):
 
-    def __init__(self, message, errors):
+    def __init__(self, message, errors=[]):
         
         super().__init__(message)
+
+        self.errors = errors
+
+class InsertOperationError(Exception): 
+
+    def __init__(self, message, errors=[]): 
+
+        super().__init__(message)
+
+        self.errors = errors
+
+class NonExistentRegister(Exception):
+
+    def __init__(self, messsage, errors=[]): 
+
+        super().__init__(messsage)
 
         self.errors = errors

@@ -1,6 +1,6 @@
 from enum import Enum
 
-class OperationsEnum(Enum):
+class OperationsEnum():
 
     SELECT = 0
     INSERT = 1
@@ -20,4 +20,3 @@ class OperationsEnum(Enum):
         'UPDATE':UPDATE,
         'DELETE':DELETE
     }
-
