@@ -4,8 +4,25 @@ import threading
 from parser.command_parser import CommandParser
 
 def main():
-    message = 'DELETE FROM BANANA"'
+    #message = input('Please inform a SQL command: ')
+
+    command = 'SELECT NAME, AGE, SURNAME FROM PERSON'
+
+    message = f'''DATABASE:LEODB
+                  USERNAME:LEONARDO
+                  PASSWORD:123
+                  COMMAND_LENGTH:{len(command)}
+                  COMMAND:{command}
+               '''
+
+    message = message.upper()
     command_parser = CommandParser(message)
+    
+    connection = command_parser.get_db_connection(message)
+
+    print(connection)
+
+    message = connection.get('command')
 
     command_parser.define_command_type()
     

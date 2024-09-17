@@ -15,11 +15,50 @@ class CommandParser():
     def __init__(self, message:str):
         self.message = message
     
+    def get_field_from_connection_message(self, message:str, field:str):
+
+        init_pivot = message.find(field) + len(field)
+        end_line = message.find('\n', init_pivot)
+
+        field = message[init_pivot:end_line]
+
+        return field
+
+    def command_from_connection(self, message:str, command_length:str):
+
+        init_pivot = message.find('COMMAND:') + len('COMMAND:')
+
+        end_pivot = init_pivot + command_length
+
+        return message[init_pivot:end_pivot]
+
+    def get_db_connection(self, message:str):
+
+        database = self.get_field_from_connection_message(message, 'DATABASE:')
+        username = self.get_field_from_connection_message(message, 'USERNAME:')
+        password = self.get_field_from_connection_message(message, 'PASSWORD:')
+        command_length = int(self.get_field_from_connection_message(message, 'COMMAND_LENGTH:'))
+        command = self.command_from_connection(message, command_length)
+
+        db_connection = {
+            'database':database.strip(),
+            'username':username.strip(),
+            'password':password.strip(),
+            'command_length':command_length,
+            'command':command.strip()
+        }
+
+        self.db_connection = db_connection
+
+        return db_connection
+
     def define_command_type(self):
 
-        first_space = self.message.find(' ')
+        message = self.db_connection.get('command')
 
-        first_word = self.message[:first_space].upper()
+        first_space = message.find(' ')
+
+        first_word = message[:first_space].upper()
 
         if first_word.upper() not in self.valid_command_types:
             return None
@@ -33,6 +72,9 @@ class CommandParser():
 
         return command_type
     
+    def get_target_database(self, message:str):
+        pass             
+
     def get_target_table(self, message:str):
         
         command_type = self.command_type

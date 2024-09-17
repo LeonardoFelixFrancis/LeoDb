@@ -7,20 +7,24 @@ class TargetTableFactory:
         self.operation_type = operation_type
 
     def get_target_table_finder(self):
+        
+        match self.operation_type:
 
-        if self.operation_type == OperationsEnum.SELECT:
-            return SelectGetTargetTable()
-        
-        if self.operation_type == OperationsEnum.INSERT:
-            return InsertGetTargetTable()
-        
-        if self.operation_type == OperationsEnum.UPDATE:
-            return UpdateGetTargetTable()
-        
-        if self.operation_type == OperationsEnum.DELETE:
-            return DeleteGetTargetTable()
+            case OperationsEnum.SELECT:
+                return SelectGetTargetTable()
+            
+            case OperationsEnum.INSERT:
+                return InsertGetTargetTable()
+            
+            case OperationsEnum.UPDATE:
+                return UpdateGetTargetTable()
+            
+            case OperationsEnum.DELETE:
+                return DeleteGetTargetTable()
+            
+            case _:
+                raise InvalidOperation(f'No valid operation was informed to the TargetTableFactory')
 
-        raise InvalidOperation(f'No valid operation was informed to the TargetTableFactory')        
     
 class BaseSelectTargetTable: 
 
@@ -42,7 +46,10 @@ class BaseSelectTargetTable:
             other_next_space = message.find(' ', i)
             i += 1
 
-        target_table_string = message[pivot_first_next_space + 1 : other_next_space].strip()
+        if other_next_space == -1:
+            target_table_string = message[pivot_first_next_space + 1:].strip()
+        else:
+            target_table_string = message[pivot_first_next_space + 1 : other_next_space].strip()
 
         if target_table_string is None or target_table_string == '':
             raise InvalidCommand(f'No Table informed')

@@ -12,17 +12,34 @@ class TargetColumnFactory:
 
     def get_target_columns_checker(self, message:str):
 
-        if self.operation_type == OperationsEnum.SELECT:
-            return SelectGetTargetColumns()
+        # if self.operation_type == OperationsEnum.SELECT:
+        #     return SelectGetTargetColumns()
         
-        if self.operation_type == OperationsEnum.INSERT:
-            return InsertGetTargetColumns()
+        # if self.operation_type == OperationsEnum.INSERT:
+        #     return InsertGetTargetColumns()
         
-        if self.operation_type == OperationsEnum.DELETE:
-            return DeleteGetTargetColumns()
+        # if self.operation_type == OperationsEnum.DELETE:
+        #     return DeleteGetTargetColumns()
         
-        if self.operation_type == OperationsEnum.UPDATE:
-            return UpdateGetTargetColumns()
+        # if self.operation_type == OperationsEnum.UPDATE:
+        #     return UpdateGetTargetColumns()
+
+        match self.operation_type:
+
+            case OperationsEnum.SELECT:
+                return SelectGetTargetColumns()
+            
+            case OperationsEnum.INSERT:
+                return InsertGetTargetColumns()
+            
+            case OperationsEnum.DELETE:
+                return DeleteGetTargetColumns()
+            
+            case OperationsEnum.UPDATE:
+                return UpdateGetTargetColumns()
+            
+            case _:
+                raise ValueError('Invalid operation type')
         
 class BaseGetTarget:
 

@@ -70,3 +70,11 @@ class NonExistentRegister(Exception):
         super().__init__(messsage)
 
         self.errors = errors
+
+class DuplicationError(Exception):
+
+    def __init__(self, message, errors=[]):
+
+        super().__init__(message)
+
+        self.errors = errors
