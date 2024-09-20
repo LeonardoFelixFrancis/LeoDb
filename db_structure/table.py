@@ -1,7 +1,7 @@
 from db_structure.row import Row
 from db_structure.column import Column
 from exceptions import TableBuildingError, InsertOperationError
-from row import RowBuilder
+from db_structure.row import RowBuilder
 
 class Table: 
 

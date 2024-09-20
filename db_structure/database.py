@@ -3,11 +3,12 @@ from exceptions import NonExistentRegister, DuplicationError
 
 class DataBase:
 
-    def __init__(self, username:str, password:str, tables:list[Table]):
+    def __init__(self, username:str, password:str, tables:list[Table], schema_name:str):
 
-        self.username = ''
-        self.password = ''
+        self.username = username
+        self.password = password
         self.tables = tables
+        self.schema_name = schema_name
 
         self.table_hash = {}
 
