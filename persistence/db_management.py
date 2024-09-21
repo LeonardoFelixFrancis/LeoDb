@@ -7,7 +7,7 @@ class DbManagement:
         self.databases = {}
 
     def add_db(self, database:DataBase):
-        self.databases[database.schema_name] = f'{database.schema_name}.leodb'
+        self.databases[database.db_name] = f'{database.db_name}.leodb'
 
     def remove_db(self, database:DataBase):
-        del self.databases[database.schema_name] 
+        del self.databases[database.db_name] 

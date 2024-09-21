@@ -3,17 +3,17 @@ import threading
 
 from parser.command_parser import CommandParser
 from db_structure.database import DataBase
-from persistence.persistence_handler import PersistenceHandler
+from persistence.persistence_handler import BasePersistenceHandler
 
 def main():
 
-    persisten_handler = PersistenceHandler()
+    persisten_handler = BasePersistenceHandler()
 
     database = DataBase('leonardo','1232', [], 'main')
 
-    persisten_handler.save_obj(database, f'{database.schema_name}.leodb')
+    persisten_handler.save_obj(database, f'{database.db_name}.leodb')
 
-    got_db = persisten_handler.retrieve_obj(f'{database.schema_name}.leodb')
+    got_db = persisten_handler.retrieve_obj(f'{database.db_name}.leodb')
 
     print(got_db)
 

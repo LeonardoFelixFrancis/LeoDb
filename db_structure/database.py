@@ -1,14 +1,16 @@
 from db_structure.table import Table
+from db_structure.base_structure import BaseStructure
 from exceptions import NonExistentRegister, DuplicationError
 
-class DataBase:
 
-    def __init__(self, username:str, password:str, tables:list[Table], schema_name:str):
+class DataBase(BaseStructure):
+
+    def __init__(self, username:str, password:str, tables:list[Table], db_name:str):
 
         self.username = username
         self.password = password
         self.tables = tables
-        self.schema_name = schema_name
+        self.name = db_name
 
         self.table_hash = {}
 

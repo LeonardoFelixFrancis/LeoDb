@@ -2,6 +2,10 @@ from command_types import OperationsEnum
 from exceptions import InvalidOperation, InvalidCommand
 from parser.target_table_factory import TargetTableFactory
 from parser.target_column_factory import TargetColumnFactory
+from parser.parser_utils import ParserUtils
+from persistence.persistence_handler import BasePersistenceHandler
+from db_structure.database import DataBase
+import json 
 
 class CommandParser():
 
@@ -9,8 +13,11 @@ class CommandParser():
         'SELECT',
         'INSERT',
         'UPDATE',
-        'DELETE'
+        'DELETE',
+        'CREATE'
     ]
+
+    persistence_handler = BasePersistenceHandler()
 
     def __init__(self, message:str):
         self.message = message
@@ -34,14 +41,22 @@ class CommandParser():
 
     def get_db_connection(self, message:str):
 
-        database = self.get_field_from_connection_message(message, 'DATABASE:')
-        username = self.get_field_from_connection_message(message, 'USERNAME:')
-        password = self.get_field_from_connection_message(message, 'PASSWORD:')
+        database_name = self.get_field_from_connection_message(message, 'DATABASE:').strip()
+        username = self.get_field_from_connection_message(message, 'USERNAME:').strip()
+        password = self.get_field_from_connection_message(message, 'PASSWORD:').strip()
         command_length = int(self.get_field_from_connection_message(message, 'COMMAND_LENGTH:'))
         command = self.command_from_connection(message, command_length)
 
+        with open('databases.json', 'w') as f:             
+            databases = json.loads(f.read())
+
+        if database_name in databases:
+            database_path = databases.get(database_name)
+
+            database = self.persistence_handler.retrieve_obj(database_path)            
+
         db_connection = {
-            'database':database.strip(),
+            'database':database,
             'username':username.strip(),
             'password':password.strip(),
             'command_length':command_length,
@@ -60,7 +75,9 @@ class CommandParser():
 
         first_word = message[:first_space].upper()
 
-        if first_word.upper() not in self.valid_command_types:
+        valid_command_types = [choice[1] for choice in OperationsEnum.choices]
+
+        if first_word.upper() not in valid_command_types:
             return None
         
         command_type = OperationsEnum.hashed_choices.get(first_word.upper())
@@ -71,9 +88,6 @@ class CommandParser():
         self.command_type = command_type
 
         return command_type
-    
-    def get_target_database(self, message:str):
-        pass             
 
     def get_target_table(self, message:str):
         
