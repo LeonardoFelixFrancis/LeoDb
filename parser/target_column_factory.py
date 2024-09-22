@@ -61,9 +61,7 @@ class BaseGetTarget:
             col = col.strip()
             col = col.lower()
 
-            column = Column(col)
-
-            columns.append(column)
+            columns.append(col)
 
         return columns
     
@@ -113,8 +111,7 @@ class UpdateGetTargetColumns(BaseGetTarget):
 
             col_name = col_value[0].strip().lower()
 
-            column = Column(col_name)
-            columns_list.append(column)
+            columns_list.append(col_name)
 
         return columns_list
 

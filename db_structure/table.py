@@ -1,15 +1,12 @@
 from db_structure.row import Row
 from db_structure.column import Column
 from exceptions import TableBuildingError, InsertOperationError
-from db_structure.row import RowBuilder
 
 class Table: 
 
-    row_builder = RowBuilder()
-
     def __init__(self, name:str, heading_cols:list[Column]):
 
-        self.rows = []
+        self.rows:Row = []
         self.heading_cols = heading_cols
         self.name = name
 
@@ -23,7 +20,12 @@ class Table:
 
     def insert_into(self, columns:list[Column]):
         
-        row = self.row_builder.add_columns(columns, self.heading_cols).build()
+        row = Row(columns)
+
+        for req_col in self.required_cols:
+
+            if req_col.name not in row.columns_hash:
+                raise InsertOperationError(f'The column {req_col.name} is required')
 
         self.rows.append(row)
 

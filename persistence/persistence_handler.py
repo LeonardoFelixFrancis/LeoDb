@@ -1,6 +1,6 @@
 
 from db_structure.database import DataBase
-from exceptions import DuplicationError
+from exceptions import DuplicationError, NonExistentRegister
 from pathlib import Path
 import pickle
 import json
@@ -28,8 +28,12 @@ class DbPersistenceHandler(BasePersistenceHandler):
         self.save_obj(db, db.get_file_name(db.name))
 
     def retrieve_db(self, db_name:str) -> DataBase: 
-        db = self.retrieve_obj(db.get_file_name(db.name))
-        return db
+
+        if self.check_if_db_exists(db_name):
+            db = self.retrieve_obj(db.get_file_name(db.name))
+            return db
+        
+        raise NonExistentRegister(f'Informed database does not exists')
     
     def read_databases_from_db_json(self) -> dict: 
 

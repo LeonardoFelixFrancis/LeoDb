@@ -3,36 +3,41 @@ import threading
 
 from parser.command_parser import CommandParser
 from db_structure.database import DataBase
-from persistence.persistence_handler import BasePersistenceHandler
+from persistence.persistence_handler import DbPersistenceHandler
 
 def main():
 
-    persisten_handler = BasePersistenceHandler()
+    persisten_handler = DbPersistenceHandler()
 
-    database = DataBase('leonardo','1232', [], 'main')
+    command = f'INSERT INTO PERSON (NAME, AGE) VALUES("LEONARDO", 21)'
 
-    persisten_handler.save_obj(database, f'{database.db_name}.leodb')
+    message = f'''DATABASE:LEODB
+                  USERNAME:LEONARDO
+                  PASSWORD:123
+                  COMMAND_LENGTH:{len(command)}
+                  COMMAND:{command}
+               '''
 
-    got_db = persisten_handler.retrieve_obj(f'{database.db_name}.leodb')
+    message = message.upper()
+    command_parser = CommandParser(message)
+    
+    connection = command_parser.get_db_connection(message)
 
-    print(got_db)
+    print(connection)
 
+    command_parser.define_command_type()
+
+    target_table = command_parser.get_target_table(connection.command)
+    target_columns = command_parser.get_target_columns(connection.command)
+
+    print(f'Target table: {target_table}')
+    print(f'Target columns: {target_columns}')
 
     #message = input('Please inform a SQL command: ')
 
     # command = 'SELECT NAME, AGE, SURNAME FROM PERSON'
 
-    # message = f'''DATABASE:LEODB
-    #               USERNAME:LEONARDO
-    #               PASSWORD:123
-    #               COMMAND_LENGTH:{len(command)}
-    #               COMMAND:{command}
-    #            '''
-
-    # message = message.upper()
-    # command_parser = CommandParser(message)
     
-    # connection = command_parser.get_db_connection(message)
 
     # print(connection)
 

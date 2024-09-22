@@ -78,3 +78,19 @@ class DuplicationError(Exception):
         super().__init__(message)
 
         self.errors = errors
+
+class UnauthorizedAccess(Exception):
+
+    def __init__(self, message, errors=[]):
+
+        super().__init__(message)
+
+        self.errors = errors
+
+class UserNotFound(Exception):
+
+    def __init__(self, message, errors=[]):
+
+        super().__init__(message)
+
+        self.errors = errors

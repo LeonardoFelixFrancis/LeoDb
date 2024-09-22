@@ -3,8 +3,9 @@ from exceptions import InvalidOperation, InvalidCommand
 from parser.target_table_factory import TargetTableFactory
 from parser.target_column_factory import TargetColumnFactory
 from parser.parser_utils import ParserUtils
-from persistence.persistence_handler import BasePersistenceHandler
+from persistence.persistence_handler import BasePersistenceHandler, DbPersistenceHandler
 from db_structure.database import DataBase
+from data_models.connection import Connection
 import json 
 
 class CommandParser():
@@ -18,6 +19,7 @@ class CommandParser():
     ]
 
     persistence_handler = BasePersistenceHandler()
+    db_persistence_handler = DbPersistenceHandler()
 
     def __init__(self, message:str):
         self.message = message
@@ -47,29 +49,21 @@ class CommandParser():
         command_length = int(self.get_field_from_connection_message(message, 'COMMAND_LENGTH:'))
         command = self.command_from_connection(message, command_length)
 
-        with open('databases.json', 'w') as f:             
-            databases = json.loads(f.read())
+        # db_connection = {
+        #     'database':database,
+        #     'username':username.strip(),
+        #     'password':password.strip(),
+        #     'command_length':command_length,
+        #     'command':command.strip()
+        # }
 
-        if database_name in databases:
-            database_path = databases.get(database_name)
+        self.db_connection = Connection(database_name, username, password, command_length, command)
 
-            database = self.persistence_handler.retrieve_obj(database_path)            
-
-        db_connection = {
-            'database':database,
-            'username':username.strip(),
-            'password':password.strip(),
-            'command_length':command_length,
-            'command':command.strip()
-        }
-
-        self.db_connection = db_connection
-
-        return db_connection
+        return self.db_connection
 
     def define_command_type(self):
 
-        message = self.db_connection.get('command')
+        message = self.db_connection.command
 
         first_space = message.find(' ')
 

@@ -1,36 +1,23 @@
 from db_structure.column import Column
 from exceptions import InsertOperationError
 
+
 class Row: 
 
     def __init__(self, columns:list[Column]):
-
         self.columns = columns
+        self.columns_hash = {}
 
-class RowBuilder:
+        for col in self.columns:
+            self.columns_hash[col.name] = col
 
-    def __init__(self):
-        self.columns:list[Column] = []
+    def get_slice(self, columns_to_get:list[str]):
+        
+        cols_to_return = []
 
-    def add_columns(self, columns:list[Column], heading_columns:list[Column]):
+        for col in columns_to_get:
+            if col in self.columns_hash:
+                cols_to_return.append(col)
 
-        temp_columns = []
+        return Row(cols_to_return)
 
-        for head_col in heading_columns:
-
-            col = next((c for c in columns if c == head_col), None)
-
-            if col is None and head_col.required:
-                raise InsertOperationError(f'The table {head_col.name} is required, and is not informed in the insert')
-            
-            if col is None:
-                col = Column(head_col.name, None, head_col.type, head_col.required)
-
-            temp_columns.append(col)
-
-        self.columns = temp_columns
-
-        return self
-
-    def build(self):
-        return Row(self.columns)
