@@ -4,10 +4,15 @@ import threading
 from parser.command_parser import CommandParser
 from db_structure.database import DataBase
 from persistence.persistence_handler import DbPersistenceHandler
+from data_models.transaction import Transaction
+from authentication.db_authentication import DbAuthenticator
+from data_engine.db_engine import DataEngine
 
 def main():
 
     persisten_handler = DbPersistenceHandler()
+    db_authenticator = DbAuthenticator()
+    
 
     command = f'INSERT INTO PERSON (NAME, AGE) VALUES("LEONARDO", 21)'
 
@@ -29,9 +34,27 @@ def main():
 
     target_table = command_parser.get_target_table(connection.command)
     target_columns = command_parser.get_target_columns(connection.command)
+    values = command_parser.get_values(connection.command)
 
-    print(f'Target table: {target_table}')
-    print(f'Target columns: {target_columns}')
+    transaction = Transaction(target_table=target_table,
+                              target_columns=target_columns,
+                              target_database=connection.database_name,
+                              values=values,
+                              authenticated=False,
+                              operation_type=command_parser.command_type,
+                              username=connection.username,
+                              password=connection.password)
+    
+
+    
+    print(transaction)
+
+    data_engine = DataEngine(transaction)
+
+    database = data_engine.retrieve_db_from_name()
+    target_table = data_engine.retrieve_table_from_db(database)
+
+    print(target_table)
 
     #message = input('Please inform a SQL command: ')
 

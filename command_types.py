@@ -25,3 +25,9 @@ class OperationsEnum():
         'DELETE':DELETE,
         'CREATE':CREATE
     }
+
+    @classmethod
+    def get_description(cls, code:int):
+        choice = next((c[1] for c in cls.choices if c[0] == code), None)
+
+        return choice

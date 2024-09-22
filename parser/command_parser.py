@@ -2,6 +2,7 @@ from command_types import OperationsEnum
 from exceptions import InvalidOperation, InvalidCommand
 from parser.target_table_factory import TargetTableFactory
 from parser.target_column_factory import TargetColumnFactory
+from parser.values_factory import ValuesFactory
 from parser.parser_utils import ParserUtils
 from persistence.persistence_handler import BasePersistenceHandler, DbPersistenceHandler
 from db_structure.database import DataBase
@@ -97,12 +98,24 @@ class CommandParser():
         
         command_type = self.command_type
 
-        target_columns_factory = TargetColumnFactory(command_type).get_target_columns_checker(message=message)
+        target_columns_factory = TargetColumnFactory(command_type).get_target_columns_checker()
 
         target_columns = target_columns_factory.get_target_columns(message=message)
 
         return target_columns
     
+    def get_values(self, message:str):
+
+        command_type = self.command_type
+
+        values_factory = ValuesFactory(command_type).get_values_checker()
+
+        if values_factory is None:
+            return None
+        
+        values = values_factory.get_values(message=message)
+
+        return values
     
 
 

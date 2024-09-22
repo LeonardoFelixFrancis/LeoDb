@@ -1,16 +1,22 @@
+from typing import Union
+
 class ParserUtils:
 
     @staticmethod
-    def get_values_beetween(message:str, start_pivot:str, end_pivot:str):
-
-        start_pivot_index = message.find(start_pivot)
-
-        if start_pivot_index == -1:
-            return None
+    def get_values_beetween(message:str, start_pivot:Union[str, int], end_pivot:Union[str, int]):
         
-        start_pivot_index += len(start_pivot)
-        
-        end_pivot_index = message.find(end_pivot)
+        if not isinstance(start_pivot, int) and not isinstance(end_pivot, int):
+            start_pivot_index = message.find(start_pivot)
+
+            if start_pivot_index == -1:
+                return None
+            
+            start_pivot_index += len(start_pivot)
+            
+            end_pivot_index = message.find(end_pivot)
+        else:
+            start_pivot_index = start_pivot
+            end_pivot_index = end_pivot
 
         values_beetween = message[start_pivot_index:end_pivot_index]
 

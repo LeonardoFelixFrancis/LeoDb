@@ -1,5 +1,6 @@
 from command_types import OperationsEnum
 from exceptions import InvalidOperation, InvalidCommand
+from parser_utils import ParserUtils
 
 class TargetTableFactory:
 
@@ -22,13 +23,17 @@ class TargetTableFactory:
             case OperationsEnum.DELETE:
                 return DeleteGetTargetTable()
             
+            case OperationsEnum.CREATE:
+                return CreateGetTargetTable()
             case _:
                 raise InvalidOperation(f'No valid operation was informed to the TargetTableFactory')
 
     
 class BaseSelectTargetTable: 
 
-    pivot_keyword = ''
+    parser_utils = ParserUtils()
+
+    pivot_keyword = ''  
 
     def get_target_table(self, message:str):
 
@@ -71,6 +76,14 @@ class UpdateGetTargetTable(BaseSelectTargetTable):
 class DeleteGetTargetTable(BaseSelectTargetTable):
 
     pivot_keyword = 'FROM'
+
+class CreateGetTargetTable(BaseSelectTargetTable):
+
+    def get_target_table(self, message: str):
+        
+        table = self.parser_utils.get_values_beetween(message, 'TABLE', '(')
+        
+        return table.strip() 
 
     
 

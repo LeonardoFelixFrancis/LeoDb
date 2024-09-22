@@ -1,9 +1,8 @@
 from db_structure.table import Table
-from db_structure.base_structure import BaseStructure
 from exceptions import NonExistentRegister, DuplicationError
 
 
-class DataBase(BaseStructure):
+class DataBase():
 
     def __init__(self, username:str, password:str, tables:list[Table], db_name:str):
 

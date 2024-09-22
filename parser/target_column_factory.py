@@ -10,7 +10,7 @@ class TargetColumnFactory:
     def __init__(self, operation_type:int):
         self.operation_type = operation_type
 
-    def get_target_columns_checker(self, message:str):
+    def get_target_columns_checker(self):
 
         # if self.operation_type == OperationsEnum.SELECT:
         #     return SelectGetTargetColumns()

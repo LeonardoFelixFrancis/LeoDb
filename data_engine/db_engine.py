@@ -3,25 +3,27 @@ from db_structure.table import Table
 from db_structure.row import Row
 from persistence.persistence_handler import DbPersistenceHandler
 from authentication.db_authentication import DbAuthenticator
-from data_models.connection import Connection
+from data_models.transaction import Transaction
 
 class DataEngine:
     
-    def __init__(self, connection):
-        self.connection = connection
+    def __init__(self, transaction:Transaction):
+        self.transaction = transaction
 
     db_persistence_handler = DbPersistenceHandler()
     db_authenticator = DbAuthenticator()
+    
+    def retrieve_db_from_name(self):
 
-    def retrieve_db_from_name(self, connection:Connection):
+        database = self.db_persistence_handler.retrieve_db(self.transaction.target_database)
+        is_authenticated = self.db_authenticator.authenticate(database, self.transaction.username, self.transaction.password)
 
-        database = self.db_persistence_handler.retrieve_db(connection.database_name)
-        self.db_authenticator.authenticate(database, connection.username, connection.password)
+        self.transaction.authenticated = is_authenticated
 
         return database
 
-    def retrieve_table_from_db(self, target_table:str, db:DataBase) -> Table:
-        table = db.get_table(target_table)
+    def retrieve_table_from_db(self, db:DataBase) -> Table:
+        table = db.get_table(self.transaction.target_table)
         return table
     
     def retrieve_row_from_table(self, table:Table, columns_to_select:list[str], conditional=None) -> list[Row]:

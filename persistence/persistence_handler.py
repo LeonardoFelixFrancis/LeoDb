@@ -2,6 +2,7 @@
 from db_structure.database import DataBase
 from exceptions import DuplicationError, NonExistentRegister
 from pathlib import Path
+import os
 import pickle
 import json
 
@@ -11,13 +12,13 @@ import json
 class BasePersistenceHandler: 
 
     def save_obj(self, obj, file_name):
-
-        with open(file_name, 'wb') as file:
+        f_path = f'{file_name}.leodb'
+        with open(f_path, 'wb') as file:
             pickle.dump(obj, file)
 
     def retrieve_obj(self, file_name):
-
-        with open(file_name, 'rb') as file:
+        f_path = f'{file_name}.leodb'
+        with open(f_path, 'rb') as file:
             instance = pickle.load(file)
         
         return instance
@@ -25,12 +26,12 @@ class BasePersistenceHandler:
 class DbPersistenceHandler(BasePersistenceHandler):
 
     def save_db(self, db:DataBase): 
-        self.save_obj(db, db.get_file_name(db.name))
+        self.save_obj(db, db.name)
 
     def retrieve_db(self, db_name:str) -> DataBase: 
 
         if self.check_if_db_exists(db_name):
-            db = self.retrieve_obj(db.get_file_name(db.name))
+            db = self.retrieve_obj(db_name)
             return db
         
         raise NonExistentRegister(f'Informed database does not exists')
@@ -39,7 +40,7 @@ class DbPersistenceHandler(BasePersistenceHandler):
 
         databases = {}
 
-        if Path('databases.json').is_file():
+        if Path('databases.json').is_file() and os.path.getsize('databases.json') > 0:
             with open('databases.json', 'r') as f:
                 databases = json.load(f)
 
@@ -61,7 +62,7 @@ class DbPersistenceHandler(BasePersistenceHandler):
         if self.check_if_db_exists(db.name):
             raise DuplicationError(f'Database {db.name} already exists')
 
-        databases[db.name] = db.get_file_name(db.name)
+        databases[db.name] = db.name
 
         with open('databases.json', 'w') as f: 
             json.dump(databases, f)
