@@ -37,11 +37,15 @@ class TargetColumnFactory:
             
             case OperationsEnum.UPDATE:
                 return UpdateGetTargetColumns()
-            
+            case OperationsEnum.CREATE:
+                return CreateGetTargetColumns()
+
             case _:
-                raise ValueError('Invalid operation type')
+                return None
         
 class BaseGetTarget:
+
+    parser_utils = ParserUtils()
 
     def get_target_columns(self, message:str) -> list[Column]:
 
@@ -115,3 +119,19 @@ class UpdateGetTargetColumns(BaseGetTarget):
 
         return columns_list
 
+class CreateGetTargetColumns(BaseGetTarget):
+
+    def get_target_columns(self, message:str):
+
+        cols_types = self.parser_utils.get_value_beetween_parenthesis(message, 1)
+
+        col_types_splited = cols_types.split(',')
+
+        columns = []
+
+        for col in col_types_splited:
+            col = col.strip()
+            got_col, col_type = col.split(' ')
+            columns.append(got_col)
+        
+        return columns

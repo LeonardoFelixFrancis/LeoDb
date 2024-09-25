@@ -14,7 +14,7 @@ def main():
     db_authenticator = DbAuthenticator()
     
 
-    command = f'INSERT INTO PERSON (NAME, AGE) VALUES("LEONARDO", 21)'
+    command = f'CREATE TABLE PERSON (NAME VARCHAR(50), NUMBER(18) INT, SURNAME VARCHAR(50))'
 
     message = f'''DATABASE:LEODB
                   USERNAME:LEONARDO
@@ -35,10 +35,12 @@ def main():
     target_table = command_parser.get_target_table(connection.command)
     target_columns = command_parser.get_target_columns(connection.command)
     values = command_parser.get_values(connection.command)
+    target_types = command_parser.get_target_types(connection.command)
 
     transaction = Transaction(target_table=target_table,
                               target_columns=target_columns,
                               target_database=connection.database_name,
+                              target_types=target_types,
                               values=values,
                               authenticated=False,
                               operation_type=command_parser.command_type,

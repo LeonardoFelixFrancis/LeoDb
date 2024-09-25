@@ -1,6 +1,6 @@
 from command_types import OperationsEnum
 from exceptions import InvalidOperation, InvalidCommand
-from parser_utils import ParserUtils
+from parser.parser_utils import ParserUtils
 
 class TargetTableFactory:
 

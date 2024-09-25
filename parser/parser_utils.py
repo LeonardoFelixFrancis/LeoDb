@@ -43,4 +43,31 @@ class ParserUtils:
 
         return keywords_found
 
-        
+    def get_value_beetween_parenthesis(self, message:str, parenthesis_pos=1):
+
+        parenthesis_count = 1
+        parenthesis_pos -= 1
+
+
+
+        start_idx = message.find('(')
+        while start_idx >= 0 and parenthesis_pos != 0:
+            start_idx = message.find('(', start_idx + 1)
+            parenthesis_pos -= 1
+
+        i = 0
+
+        while i < len(message) - 1:
+            
+            if message[i] == '(':
+                parenthesis_count += 1
+
+            if message[i] == ')':
+                parenthesis_count -= 1
+
+            if parenthesis_count == 0:
+                break
+
+            i += 1
+            
+        return message[start_idx+1:i]
